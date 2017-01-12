@@ -39,6 +39,9 @@ ProxyChoice(){
 		ProxyAPT $ProxyChoice
 		# Environment variables set up
 		ProxyENV $ProxyChoice
+		# exporting in .bashrc file
+		ProxyBASHRC $ProxyChoice
+
 		echo "ProxySwitch Successful."
 	else
 		echo "Invalid Proxy Selected."
@@ -75,12 +78,31 @@ ProxyAPT(){
 # set up the environment variables in the proxy
 ProxyENV(){
 	proxy="${PROXIES[$1]}"
+	
 	#remove previous proxy
 	sudo sed -i.bak '/http_proxy/d' /etc/environment
 	sudo sed -i.bak '/https_proxy/d' /etc/environment
 	sudo sed -i.bak '/ftp_proxy/d' /etc/environment
 	sudo sed -i.bak '/socks_proxy/d' /etc/environment
+
 	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"" >> /etc/environment
 
 }
+
+# exporting the variables in the bashrc file.
+ProxyBASHRC(){
+	proxy="${PROXIES[$1]}"
+
+	#remove previous proxy
+	sudo sed -i.bak '/proxyswitch/d' $HOME/.bashrc
+	sudo sed -i.bak '/http_proxy/d' $HOME/.bashrc
+	sudo sed -i.bak '/https_proxy/d' $HOME/.bashrc
+	sudo sed -i.bak '/ftp_proxy/d' $HOME/.bashrc
+	sudo sed -i.bak '/socks_proxy/d' $HOME/.bashrc
+
+	sudo echo -e "## Proxy settings by proxyswitch\nexport http_proxy=\"http://$proxy/\"\nexport https_proxy=\"https://$proxy/\"\nexport socks_proxy=\"socks://$proxy/\"\nexport ftp_proxy=\"ftp://$proxy/\"" >> $HOME/.bashrc
+
+	source $HOME/.bashrc
+}
+
 CheckRoot
