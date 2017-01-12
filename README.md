@@ -20,7 +20,9 @@ Use **proxyswitch** to switch proxies in linux with ease.
 	bash install.sh
 
 
-Then enter the number of proxies you want to save and their details.Save the proxies that you commonly use and have to switch between frequently.
+Then enter the number of proxies you want to save and their details.
+
+Save the proxies that you commonly use and have to switch between frequently.
 
 **NOTE : In your ~/.bashrc file, DON'T export any proxy environment variables.**
 
@@ -34,7 +36,7 @@ Use the following command from anywhere in the terminal
 
 It'll display you saved proxies and you can chose from them.
 
-# How To Unistall
+# How To Uninstall
 
 	bash uninstall.sh
 
@@ -48,10 +50,16 @@ It'll display you saved proxies and you can chose from them.
 
 
 ## About the project author
+
 #### Roopansh Bansal
+
 B.Tech undergraduate (Computer Science & Engineering)
+
 IIT Guwahati
+
 India
 
+
 roopansh.bansal@gmail.com
+
 www.linkedin.com/in/roopansh
