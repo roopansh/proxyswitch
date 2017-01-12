@@ -22,15 +22,22 @@ ProxyChoice(){
 	echo "You have  $PROXYCOUNT  saved proxies."
 	echo
 	for (( i = 1; i <= $PROXYCOUNT; i++ )); do
-		echo "$i - ${PROXIES[$i-1]}"
+		proxy="${PROXIES[$i-1]}"
+		# display choice number
+		echo -n "$i - "
+		# display username
+		sed 's/\(.*\):.*@\(.*\)/\2 \1/' <<< "$proxy"
 		echo
 	done
 	read -p "Which proxy you want to use? " ProxyChoice
-	ProxyChoice=$((ProxyChoice-1))
 	# check if in range
-	if [[ $ProxyChoice -ge '0' && $ProxyChoice -le $PROXYCOUNT ]]; then
+	if [[ $ProxyChoice -gt '0' && $ProxyChoice -le $PROXYCOUNT ]]; then
+		ProxyChoice=$((ProxyChoice-1))
+		# System Settings Proxy 
 		ProxySYS $ProxyChoice
+		# Apt Proxy Configuration
 		ProxyAPT $ProxyChoice
+		# Environment variables set up
 		ProxyENV $ProxyChoice
 		echo "ProxySwitch Successful."
 	else
@@ -74,5 +81,6 @@ ProxyENV(){
 	sudo sed -i.bak '/ftp_proxy/d' /etc/environment
 	sudo sed -i.bak '/socks_proxy/d' /etc/environment
 	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"" >> /etc/environment
+
 }
 CheckRoot
