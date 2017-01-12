@@ -40,6 +40,7 @@ It'll display you saved proxies and you can chose from them.
 
 	bash uninstall.sh
 
+**Please raise an issue if you are not happy with something before uninstalling**
 
 # Up Coming
 
