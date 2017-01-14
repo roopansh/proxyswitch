@@ -46,10 +46,10 @@ SaveProxyDetails(){
 	echo
 	case $response in
 		y|Y)
-				echo "Enter you proxy Authentication"
-				read -p "Enter username : " -r proxyUsername
-				read -p "Enter Password : " -r proxyPassword
-				ProxyText=$proxyUsername":"$proxyPassword"@"$proxy":"$proxyPort
+			echo "Enter you proxy Authentication"
+			read -p "Enter username : " -r proxyUsername
+			read -p "Enter Password : " -r proxyPassword
+			ProxyText=$proxyUsername":"$proxyPassword"@"$proxy":"$proxyPort
 			;;
 		*)	
 			ProxyText=$proxy":"$proxyPort

@@ -29,19 +29,20 @@ ProxyChoice(){
 		sed 's/\(.*\):.*@\(.*\)/\2 \1/' <<< "$proxy"
 		echo
 	done
+
+	echo "$i - Some Other Proxy"
+	echo
+
 	read -p "Which proxy you want to use? " ProxyChoice
+	
 	# check if in range
 	if [[ $ProxyChoice -gt '0' && $ProxyChoice -le $PROXYCOUNT ]]; then
 		ProxyChoice=$((ProxyChoice-1))
-		# System Settings Proxy 
-		ProxySYS $ProxyChoice
-		# Apt Proxy Configuration
-		ProxyAPT $ProxyChoice
-		# Environment variables set up
-		ProxyENV $ProxyChoice
-		# exporting in .bashrc file
-		ProxyBASHRC $ProxyChoice
-
+		proxy="${PROXIES[$1]}"
+		SetProxy $proxy
+		echo "ProxySwitch Successful."
+	elif [[ $ProxyChoice == $(($PROXYCOUNT + 1)) ]]; then
+		NewProxy
 		echo "ProxySwitch Successful."
 	else
 		echo "Invalid Proxy Selected."
@@ -50,10 +51,20 @@ ProxyChoice(){
 
 }
 
+SetProxy(){
+	# System Settings Proxy 
+	ProxySYS $1
+	# Apt Proxy Configuration
+	ProxyAPT $1
+	# Environment variables set up
+	ProxyENV $1
+	# exporting in .bashrc file
+	ProxyBASHRC $1
+}
 
 # set the System proxy
 ProxySYS(){
-	proxy="${PROXIES[$1]}"
+	proxy="$1"
 	proxy=$(sed 's/.*@\(.*\)/\1/' <<< "$proxy")
 	ProxyPROXY=$(sed 's/\(.*\):.*/\1/' <<< "$proxy")
 	ProxyPORT=$(sed 's/.*:\(.*\)/\1/' <<< "$proxy")
@@ -70,14 +81,14 @@ ProxySYS(){
 }
 # set the apt proxy
 ProxyAPT(){
-	proxy="${PROXIES[$1]}"
+	proxy="$1"
 	sudo sed -i.bak '/proxy/d' /etc/apt/apt.conf
 	sudo echo -e "Acquire::http::proxy \"http://$proxy/\";\nAcquire::https::proxy \"https://$proxy/\";\nAcquire::ftp::proxy \"ftp://$proxy/\";\nAcquire::socks::proxy \"socks://$proxy/\";" >> /etc/apt/apt.conf
 }
 
 # set up the environment variables in the proxy
 ProxyENV(){
-	proxy="${PROXIES[$1]}"
+	proxy="$1"
 	
 	#remove previous proxy
 	sudo sed -i.bak '/http_proxy/d' /etc/environment
@@ -86,12 +97,11 @@ ProxyENV(){
 	sudo sed -i.bak '/socks_proxy/d' /etc/environment
 
 	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"" >> /etc/environment
-
 }
 
 # exporting the variables in the bashrc file.
 ProxyBASHRC(){
-	proxy="${PROXIES[$1]}"
+	proxy="$1"
 
 	#remove previous proxy
 	sudo sed -i.bak '/proxyswitch/d' $HOME/.bashrc
@@ -103,6 +113,28 @@ ProxyBASHRC(){
 	sudo echo -e "## Proxy settings by proxyswitch\nexport http_proxy=\"http://$proxy/\"\nexport https_proxy=\"https://$proxy/\"\nexport socks_proxy=\"socks://$proxy/\"\nexport ftp_proxy=\"ftp://$proxy/\"" >> $HOME/.bashrc
 
 	source $HOME/.bashrc
+}
+
+NewProxy(){
+	echo
+	echo "Enter Details for proxy : "
+	read -p "Proxy (e.g. 202.141.80.24) : " proxy
+	read -p "Proxy Port (e.g. 3128) : " proxyPort
+	read -p "Use proxy Authentication? (Y/N) : " -n 1 response
+	echo
+	case $response in
+		y|Y)
+			echo "Enter you proxy Authentication"
+			read -p "Enter username : " -r proxyUsername
+			read -p "Enter Password : " -r proxyPassword
+			Proxy=$proxyUsername":"$proxyPassword"@"$proxy":"$proxyPort
+			;;
+		*)	
+			Proxy=$proxy":"$proxyPort
+			;;
+	esac
+
+	SetProxy $Proxy
 }
 
 CheckRoot
