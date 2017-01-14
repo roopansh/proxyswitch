@@ -44,9 +44,7 @@ It'll display you saved proxies and you can chose from them.
 
 # Up Coming
 
-- Add new proxy settings while using the script itself and no need to save it in advance.
-
-- Add new proxies to the database instead of creating the new database everytime you install it. Currently, on installing proxyswitch again, the previous database of proxies will be deleted and replaced by the new proxies you enter at this time of installation.
+- Add new proxies to the database instead of creating the new database everytime you install it. Currently, on installing proxyswitch again, the previous database of proxies will be deleted and replaced by the new proxies you enter at latter installation.
 
 
 
