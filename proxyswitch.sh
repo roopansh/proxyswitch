@@ -37,7 +37,7 @@ ProxyChoice(){
 	# check if in range
 	if [[ $ProxyChoice -gt '0' && $ProxyChoice -le $PROXYCOUNT ]]; then
 		ProxyChoice=$((ProxyChoice-1))
-		proxy="${PROXIES[$1]}"
+		proxy="${PROXIES[$ProxyChoice]}"
 		SetProxy $proxy
 		echo "ProxySwitch Successful."
 	elif [[ $ProxyChoice == $(($PROXYCOUNT + 1)) ]]; then
@@ -67,6 +67,7 @@ ProxySYS(){
 	proxy=$(sed 's/.*@\(.*\)/\1/' <<< "$proxy")
 	ProxyPROXY=$(sed 's/\(.*\):.*/\1/' <<< "$proxy")
 	ProxyPORT=$(sed 's/.*:\(.*\)/\1/' <<< "$proxy")
+
 	# echo $ProxyPROXY $ProxyPORT
 	sudo gsettings set org.gnome.system.proxy mode 'manual'
 	sudo gsettings set org.gnome.system.proxy.http host "$ProxyPROXY"
@@ -78,6 +79,7 @@ ProxySYS(){
 	sudo gsettings set org.gnome.system.proxy.socks host "$ProxyPROXY"
 	sudo gsettings set org.gnome.system.proxy.socks port "$ProxyPORT"
 }
+
 # set the apt proxy
 ProxyAPT(){
 	proxy="$1"
@@ -124,7 +126,7 @@ NewProxy(){
 	case $response in
 		y|Y)
 			echo "Enter you proxy Authentication"
-			read -p "Enter username : " -r proxyUsername
+			read -p "Enter Username : " -r proxyUsername
 			read -p "Enter Password : " -r proxyPassword
 			Proxy=$proxyUsername":"$proxyPassword"@"$proxy":"$proxyPort
 			;;
