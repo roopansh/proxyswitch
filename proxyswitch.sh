@@ -2,8 +2,7 @@
 
 # Some global variables
 source "$HOME/.proxyswitch/proxyDB.txt"
-PROXYCOUNT=$PROXYCOUNT
-PROXIES=("${PROXIES[@]}")
+
 
 # Proceed only if root privileges
 CheckRoot(){
