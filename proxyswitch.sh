@@ -110,9 +110,6 @@ ProxyBASHRC(){
 	sudo sed -i.bak '/ftp_proxy/d' $HOME/.bashrc
 	sudo sed -i.bak '/socks_proxy/d' $HOME/.bashrc
 
-	sudo echo -e "## Proxy settings by proxyswitch\nexport http_proxy=\"http://$proxy/\"\nexport https_proxy=\"https://$proxy/\"\nexport socks_proxy=\"socks://$proxy/\"\nexport ftp_proxy=\"ftp://$proxy/\"" >> $HOME/.bashrc
-
-	source $HOME/.bashrc
 }
 
 NewProxy(){
