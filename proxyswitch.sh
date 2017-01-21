@@ -67,11 +67,19 @@ ProxySYS(){
 	proxy=$(sed 's/.*@\(.*\)/\1/' <<< "$proxy")
 	ProxyPROXY=$(sed 's/\(.*\):.*/\1/' <<< "$proxy")
 	ProxyPORT=$(sed 's/.*:\(.*\)/\1/' <<< "$proxy")
+	# ProxyUN=$(sed 's/\(.*\):.*@.*:.*/\1/' <<< "$proxy")
+	# ProxyPASS=$(sed 's/.*:\(.*\)@.*:.*/\1/' <<< "$proxy")
 
-	# echo $ProxyPROXY $ProxyPORT
+	# echo $ProxyPROXY $ProxyPORT $ProxyUN $ProxyPASS
+	
+	sudo gsettings set org.gnome.system.proxy use-same-proxy true
+	sudo gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '*.iitg.ernet.in', '*.iitg.ac.in', '202.141.*.*', '172.16.*.*']"
 	sudo gsettings set org.gnome.system.proxy mode 'manual'
 	sudo gsettings set org.gnome.system.proxy.http host "$ProxyPROXY"
 	sudo gsettings set org.gnome.system.proxy.http port "$ProxyPORT"
+	# sudo gsettings set org.gnome.system.proxy.http use-authentication true
+	# sudo gsettings set org.gnome.system.proxy.http authentication-user '$ProxyUN'
+	# sudo gsettings set org.gnome.system.proxy.http authentication-password '$ProxyPASS'
 	sudo gsettings set org.gnome.system.proxy.https host "$ProxyPROXY"
 	sudo gsettings set org.gnome.system.proxy.https port "$ProxyPORT"
 	sudo gsettings set org.gnome.system.proxy.ftp host "$ProxyPROXY"
