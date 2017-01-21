@@ -42,11 +42,6 @@ It'll display you saved proxies and you can chose from them.
 
 **Please raise an issue if you are not happy with something before uninstalling**
 
-# Up Coming
-
-- Add new proxies to the database instead of creating the new database everytime you install it. Currently, on installing proxyswitch again, the previous database of proxies will be deleted and replaced by the new proxies you enter at latter installation.
-
-
 
 ## About the project author
 #### Roopansh Bansal
