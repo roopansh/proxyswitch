@@ -38,7 +38,7 @@ ProxyChoice(){
 	echo "$i > SOME OTHER PROXY"
 	echo
 
-	read -p "Which proxy you want to use? " ProxyChoice
+	read -p "Chose any one option : " ProxyChoice
 	
 	# check if in range
 	if [[ $ProxyChoice -gt '0' && $ProxyChoice -le $PROXYCOUNT ]]; then
