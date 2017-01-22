@@ -1,5 +1,6 @@
-# proxyswitch
 ===============
+# PROXYSWITCH
+
 
 ## Features
 1) Changes proxy in the following :
