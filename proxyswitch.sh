@@ -52,7 +52,7 @@ ProxyChoice(){
 		NewProxy
 	elif [[ $ProxyChoice == '0' ]]; then
 		# No Proxy
-		ProxyNone
+		ProxyNone 'none'
 	else
 		echo "Invalid Proxy Selected."
 		echo "ProxySwitch Failed."
@@ -73,6 +73,8 @@ SetProxy(){
 	# exporting in .bashrc file
 	ProxyBASHRC $1
 
+	source $HOME/.bashrc
+	
 	echo "New proxy settings applied."
 	echo "ProxySwitch Successful."
 }
@@ -83,25 +85,17 @@ ProxySYS(){
 	proxy=$(sed 's/.*@\(.*\)/\1/' <<< "$proxy")
 	ProxyPROXY=$(sed 's/\(.*\):.*/\1/' <<< "$proxy")
 	ProxyPORT=$(sed 's/.*:\(.*\)/\1/' <<< "$proxy")
-	# ProxyUN=$(sed 's/\(.*\):.*@.*:.*/\1/' <<< "$proxy")
-	# ProxyPASS=$(sed 's/.*:\(.*\)@.*:.*/\1/' <<< "$proxy")
 
-	# echo $ProxyPROXY $ProxyPORT $ProxyUN $ProxyPASS
-	
-	sudo gsettings set org.gnome.system.proxy use-same-proxy true
-	sudo gsettings set org.gnome.system.proxy mode 'manual'
-	sudo gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '*.iitg.ernet.in', '*.iitg.ac.in', '202.141.*.*', '172.16.*.*']"
-	sudo gsettings set org.gnome.system.proxy.http host "$ProxyPROXY"
-	sudo gsettings set org.gnome.system.proxy.http port "$ProxyPORT"
-	# sudo gsettings set org.gnome.system.proxy.http use-authentication true
-	# sudo gsettings set org.gnome.system.proxy.http authentication-user '$ProxyUN'
-	# sudo gsettings set org.gnome.system.proxy.http authentication-password '$ProxyPASS'
-	sudo gsettings set org.gnome.system.proxy.https host "$ProxyPROXY"
-	sudo gsettings set org.gnome.system.proxy.https port "$ProxyPORT"
-	sudo gsettings set org.gnome.system.proxy.ftp host "$ProxyPROXY"
-	sudo gsettings set org.gnome.system.proxy.ftp port "$ProxyPORT"
-	sudo gsettings set org.gnome.system.proxy.socks host "$ProxyPROXY"
-	sudo gsettings set org.gnome.system.proxy.socks port "$ProxyPORT"
+	sudo gsettings set org.gnome.system.proxy.http enabled true;
+	sudo gsettings set org.gnome.system.proxy.http host $ProxyPROXY;
+	sudo gsettings set org.gnome.system.proxy.http port $ProxyPORT;
+	sudo gsettings set org.gnome.system.proxy mode 'manual';
+	sudo gsettings set org.gnome.system.proxy.https host $ProxyPROXY
+	sudo gsettings set org.gnome.system.proxy.https port $ProxyPORT
+	sudo gsettings set org.gnome.system.proxy.ftp host $ProxyPROXY
+	sudo gsettings set org.gnome.system.proxy.ftp port $ProxyPORT
+	sudo gsettings set org.gnome.system.proxy.socks host $ProxyPROXY
+	sudo gsettings set org.gnome.system.proxy.socks port $ProxyPORT
 }
 
 # set the apt proxy
@@ -116,6 +110,11 @@ ProxyENV(){
 	proxy="$1"
 	
 	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"" >> /etc/environment
+
+	export http_proxy="http://$proxy/"
+	export https_proxy="https://$proxy/"
+	export socks_proxy="socks://$proxy/"
+	export ftp_proxy="ftp://$proxy/"
 }
 
 # exporting the variables in the bashrc file.
@@ -123,15 +122,14 @@ ProxyBASHRC(){
 	proxy="$1"
 
 	sudo echo -e "## Proxy settings by proxyswitch\nexport http_proxy=\"http://$proxy/\"\nexport https_proxy=\"https://$proxy/\"\nexport socks_proxy=\"socks://$proxy/\"\nexport ftp_proxy=\"ftp://$proxy/\"" >> $HOME/.bashrc
-
-	source $HOME/.bashrc
 }
 
 # Set no proxy ... Remove all the previous proxy settings 
 ProxyNone(){
-	# System Settings Proxy 
-	sudo gsettings set org.gnome.system.proxy use-same-proxy true
-	sudo gsettings set org.gnome.system.proxy mode 'none'
+	# System Settings Proxy
+	if [[ $1 == 'none' ]]; then
+		sudo gsettings set org.gnome.system.proxy mode 'none'
+	fi
 
 	# Apt Proxy Configuration
 	sudo sed -i.bak '/http::proxy/d' /etc/apt/apt.conf

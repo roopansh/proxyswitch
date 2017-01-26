@@ -62,6 +62,7 @@ SaveProxyDetails(){
 Finalise(){
 	sudo cp proxyswitch.sh /usr/local/bin/proxyswitch
 	sudo chmod 755 /usr/local/bin/proxyswitch
+	sudo gsettings set org.gnome.system.proxy ignore-hosts "['localhost', '127.0.0.0/8', '::1', '*.iitg.ernet.in', '*.iitg.ac.in', '202.141.*.*', '172.16.*.*']"
 	echo
 	echo "ProxySwitch installed successfully."
 	echo "Use 'proxyswitch' from terminal to switch proxies."
