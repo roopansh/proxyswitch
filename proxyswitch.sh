@@ -86,7 +86,7 @@ ProxySYS(){
 	ProxyPROXY=$(sed 's/\(.*\):.*/\1/' <<< "$proxy")
 	ProxyPORT=$(sed 's/.*:\(.*\)/\1/' <<< "$proxy")
 
-	sudo gsettings set org.gnome.system.proxy.http enabled true;
+	sudo gsettings set org.gnome.system.proxy mode 'manual';
 	sudo gsettings set org.gnome.system.proxy.http host $ProxyPROXY;
 	sudo gsettings set org.gnome.system.proxy.http port $ProxyPORT;
 	sudo gsettings set org.gnome.system.proxy.https host $ProxyPROXY
@@ -95,7 +95,6 @@ ProxySYS(){
 	sudo gsettings set org.gnome.system.proxy.ftp port $ProxyPORT
 	sudo gsettings set org.gnome.system.proxy.socks host $ProxyPROXY
 	sudo gsettings set org.gnome.system.proxy.socks port $ProxyPORT
-	sudo gsettings set org.gnome.system.proxy mode 'manual';
 }
 
 # set the apt proxy
