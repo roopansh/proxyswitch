@@ -103,14 +103,14 @@ ProxySYS(){
 ProxyAPT(){
 	proxy="$1"
 	
-	sudo echo -e "Acquire::http::proxy \"http://$proxy/\";\nAcquire::https::proxy \"https://$proxy/\";\nAcquire::ftp::proxy \"ftp://$proxy/\";\nAcquire::socks::proxy \"socks://$proxy/\";\nAcquire::all::proxy \"all://$proxy/\";" >> /etc/apt/apt.conf
+	sudo echo -e "Acquire::http::proxy \"http://$proxy/\";\nAcquire::https::proxy \"https://$proxy/\";\nAcquire::ftp::proxy \"ftp://$proxy/\";\nAcquire::socks::proxy \"socks://$proxy/\";\nAcquire::all::proxy \"https://$proxy/\";" >> /etc/apt/apt.conf
 }
 
 # set up the environment variables in the proxy
 ProxyENV(){
 	proxy="$1"
 	
-	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"\nall_proxy=\"all://$proxy/\"" >> /etc/environment
+	sudo echo -e "http_proxy=\"http://$proxy/\"\nhttps_proxy=\"https://$proxy/\"\nftp_proxy=\"ftp://$proxy/\"\nsocks_proxy=\"socks://$proxy/\"\nall_proxy=\"https://$proxy/\"" >> /etc/environment
 
 	export http_proxy="http://$proxy/"
 	export https_proxy="https://$proxy/"
